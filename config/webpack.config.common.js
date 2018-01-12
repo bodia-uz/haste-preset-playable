@@ -36,6 +36,7 @@ const config = {
       require('../src/loaders/babel')(),
       require('../src/loaders/typescript')(projectConfig.isAngularProject()),
       require('../src/loaders/graphql')(),
+      require('../src/loaders/dot')(),
       require('../src/loaders/assets')(),
       require('../src/loaders/svg')(),
       require('../src/loaders/html')(),

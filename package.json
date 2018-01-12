@@ -30,6 +30,8 @@
     "cross-spawn": "~5.1.0",
     "css-loader": "~0.28.4",
     "detect-port": "~1.2.1",
+    "dot": "^1.1.2",
+    "dotjs-loader": "^0.1.0",
     "duplicate-package-checker-webpack-plugin": "~1.2.5",
     "eslint": "~3.19.0",
     "eslint-config-wix": "~1.1.14",
