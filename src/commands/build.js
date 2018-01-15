@@ -46,6 +46,7 @@ module.exports = runner.command(async tasks => {
     wixMavenStatics,
   } = tasks;
 
+  const transpileDot = tasks[require.resolve('../tasks/transpileDot.js')];
   const migrateScopePackages = tasks[require.resolve('../tasks/migrate-to-scoped-packages/index')];
   const migrateBowerArtifactory = tasks[require.resolve('../tasks/migrate-bower-artifactory/index')];
 
@@ -60,6 +61,10 @@ module.exports = runner.command(async tasks => {
   await Promise.all([
     transpileJavascript().then(() => transpileNgAnnotate()),
     ...transpileCss(),
+    transpileDot({
+      pattern: `${globs.base()}/**/*.dot`,
+      target: 'dist'
+    }),
     copy({pattern: [
       `${globs.base()}/assets/**/*`,
       `${globs.base()}/**/*.{ejs,html,vm}`,
