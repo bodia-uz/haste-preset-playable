@@ -60,7 +60,6 @@
     "haste-task-webpack": "~0.2.1",
     "haste-task-wix-app-server": "~1.0.0",
     "haste-task-wix-cdn": "~1.0.0",
-    "haste-task-wix-dep-check": "~1.0.0",
     "haste-task-wix-update-node-version": "~1.0.0",
     "haste-task-wix-wnpm-release": "~1.0.0",
     "html-loader": "~0.4.5",

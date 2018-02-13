@@ -33,7 +33,6 @@ module.exports = runner.command(async tasks => {
     sass,
     webpack,
     typescript,
-    wixDepCheck,
     wixUpdateNodeVersion,
   } = tasks;
 
@@ -42,7 +41,6 @@ module.exports = runner.command(async tasks => {
   await Promise.all([
     clean({pattern: `{dist,target}/*`}),
     wixUpdateNodeVersion(),
-    wixDepCheck()
   ]);
 
   await Promise.all([
