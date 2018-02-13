@@ -884,42 +884,6 @@ describe('Aggregator: Build', () => {
     });
   });
 
-  describe('yoshi-maven-statics', () => {
-    it('should use yoshi-maven-statics', () => {
-      const res = test
-        .setup({
-          'package.json': fx.packageJson({
-            clientProjectName: 'some-client-proj'
-          }),
-          'pom.xml': fx.pom()
-        })
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content('maven/assembly/tar.gz.xml').replace(/\s/g, '')).to.contain(`
-        <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-            <id>wix-angular</id>
-            <baseDirectory>/</baseDirectory>
-            <formats>
-                <format>tar.gz</format>
-            </formats>
-            <fileSets>
-                <fileSet>
-                    <directory>\${project.basedir}/node_modules/some-client-proj/dist</directory>
-                    <outputDirectory>/</outputDirectory>
-                    <includes>
-                        <include>*</include>
-                        <include>*/**</include>
-                    </includes>
-                </fileSet>
-            </fileSets>
-        </assembly>
-      `.replace(/\s/g, ''));
-    });
-  });
-
   describe('yoshi-clean', () => {
     it('should use yoshi-clean', () => {
       const res = test

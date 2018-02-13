@@ -9,7 +9,6 @@ const {
   entry,
   defaultEntry,
   hmr,
-  clientProjectName
 } = require('../../config/project');
 const globs = require('../globs');
 const {
@@ -39,7 +38,6 @@ module.exports = runner.command(async tasks => {
     babel,
     typescript,
     wixDepCheck,
-    wixMavenStatics,
     wixAppServer,
     wixUpdateNodeVersion,
   } = tasks;
@@ -88,10 +86,6 @@ module.exports = runner.command(async tasks => {
       defaultEntry: defaultEntry(),
       hmr: hmr(),
     }),
-    wixMavenStatics({
-      clientProjectName: clientProjectName(),
-      staticsDir: clientFilesPath()
-    })
   ]);
 
   if (shouldRunTests) {

@@ -5,8 +5,6 @@ const parseArgs = require('minimist');
 const globs = require('../globs');
 const {
   runIndividualTranspiler,
-  clientProjectName,
-  clientFilesPath,
 } = require('../../config/project');
 const {
   watchMode,
@@ -37,7 +35,6 @@ module.exports = runner.command(async tasks => {
     typescript,
     wixDepCheck,
     wixUpdateNodeVersion,
-    wixMavenStatics,
   } = tasks;
 
   const transpileDot = tasks[require.resolve('../tasks/transpileDot.js')];
@@ -73,10 +70,6 @@ module.exports = runner.command(async tasks => {
       target: 'dist/statics'
     }, {title: 'copy-static-assets'}),
     bundle(),
-    wixMavenStatics({
-      clientProjectName: clientProjectName(),
-      staticsDir: clientFilesPath()
-    })
   ]);
 
   function bundle() {
