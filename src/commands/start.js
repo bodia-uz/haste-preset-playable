@@ -16,7 +16,6 @@ const globs = require('../globs');
 const {
   isTypescriptProject,
   isBabelProject,
-  shouldRunLess,
   shouldRunSass,
   suffix,
   watch,
@@ -36,7 +35,6 @@ module.exports = runner.command(async tasks => {
   const {
     wixCdn,
     sass,
-    less,
     copy,
     clean,
     babel,
@@ -146,28 +144,12 @@ module.exports = runner.command(async tasks => {
       );
     }
 
-    if (shouldRunLess()) {
-      watch({pattern: globs.less()}, changed =>
-        less({
-          pattern: changed,
-          target: 'dist',
-          paths: ['.', 'node_modules'],
-        }),
-      );
-    }
-
     return [
       !shouldRunSass() ? null :
         sass({
           pattern: globs.sass(),
           target: 'dist',
           options: {includePaths: ['node_modules', 'node_modules/compass-mixins/lib']}
-        }),
-      !shouldRunLess() ? null :
-        less({
-          pattern: globs.less(),
-          target: 'dist',
-          paths: ['.', 'node_modules'],
         }),
     ].filter(a => a);
   }

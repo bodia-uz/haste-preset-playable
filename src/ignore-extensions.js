@@ -41,7 +41,6 @@ function noop() {}
 
 require.extensions['.css'] = mockCssModules;
 require.extensions['.scss'] = mockCssModules;
-require.extensions['.less'] = mockCssModules;
 
 require.extensions['.graphql'] = loadGraphQLModules;
 require.extensions['.gql'] = loadGraphQLModules;

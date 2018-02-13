@@ -14,7 +14,6 @@ const {
   isTypescriptProject,
   isBabelProject,
   shouldRunWebpack,
-  shouldRunLess,
   shouldRunSass,
 } = require('../utils');
 
@@ -31,7 +30,6 @@ module.exports = runner.command(async tasks => {
   }
 
   const {
-    less,
     clean,
     copy,
     babel,
@@ -113,12 +111,6 @@ module.exports = runner.command(async tasks => {
           pattern: globs.sass(),
           target: 'dist',
           options: {includePaths: ['node_modules', 'node_modules/compass-mixins/lib']}
-        }),
-      !shouldRunLess() ? null :
-        less({
-          pattern: globs.less(),
-          target: 'dist',
-          options: {paths: ['.', 'node_modules']},
         }),
     ].filter(a => a);
   }

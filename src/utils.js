@@ -68,10 +68,6 @@ module.exports.isBabelProject = () => {
   return !!glob.sync(path.resolve('.babelrc')).length || !!project.babel();
 };
 
-module.exports.shouldRunLess = () => {
-  return glob.sync(`${globs.base()}/**/*.less`).length > 0;
-};
-
 module.exports.reportWebpackStats = (stats, outputPath) => {
   logIfAny(stats.toString({
     colors: true,
