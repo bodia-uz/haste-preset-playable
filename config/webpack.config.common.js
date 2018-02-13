@@ -26,7 +26,7 @@ const config = {
 
   plugins: [
     new CaseSensitivePathsPlugin(),
-    require('../src/webpack-plugins/babelHappyPack')(projectConfig.isAngularProject()),
+    require('../src/webpack-plugins/babelHappyPack')(),
     stylable.plugin()
   ],
 
@@ -34,7 +34,7 @@ const config = {
     rules: [
       ...projectConfig.features().externalizeRelativeLodash ? [require('../src/loaders/externalize-relative-lodash')()] : [],
       require('../src/loaders/babel')(),
-      require('../src/loaders/typescript')(projectConfig.isAngularProject()),
+      require('../src/loaders/typescript')(),
       require('../src/loaders/graphql')(),
       require('../src/loaders/dot')(),
       require('../src/loaders/assets')(),

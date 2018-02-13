@@ -1,11 +1,7 @@
 const helpers = require('./happyPackHelpers');
 
-module.exports = isAngularProject => {
-  // we need to remove ng loader for non angular apps
+module.exports = () => {
   const loaders = [
-    isAngularProject && {
-      loader: 'ng-annotate-loader'
-    },
     {
       loader: 'babel-loader'
     }

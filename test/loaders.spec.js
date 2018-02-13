@@ -40,40 +40,6 @@ describe('Loaders', () => {
       expect(test.content('dist/statics/app.bundle.js')).to.contain('var aServerFunction = 1;');
     });
 
-    it('should apply ng-annotate loader on angular project', () => {
-      test
-        .setup({
-          'src/client.js': `angular.module('fakeModule', []).config(function($javascript){});`,
-          'package.json': `{\n
-            "name": "a",\n
-            "dependencies": {\n
-              "angular": "^1.5.0"\n
-            }
-          }`
-        })
-        .execute('build');
-
-      expect(test.content('dist/statics/app.bundle.js')).to
-        .contain(`.config(["$javascript", function ($javascript)`);
-    });
-
-    it('should apply ng-annotate loader on angular project with peerDependency', () => {
-      test
-        .setup({
-          'src/client.js': `angular.module('fakeModule', []).config(function($javascript){});`,
-          'package.json': `{\n
-            "name": "a",\n
-            "peerDependencies": {\n
-              "angular": "^1.5.0"\n
-            }
-          }`
-        })
-        .execute('build');
-
-      expect(test.content('dist/statics/app.bundle.js')).to
-        .contain(`.config(["$javascript", function ($javascript)`);
-    });
-
     it('should run over specified 3rd party modules', () => {
       const res = test
         .setup({
@@ -109,23 +75,6 @@ describe('Loaders', () => {
         })
         .execute('build');
       expect(test.content('dist/statics/app.bundle.js')).to.contain('var aServerFunction = 1;');
-    });
-
-    it('should apply ng-annotate loader on angular project', () => {
-      test
-        .setup({
-          'src/app.ts': `declare var angular: any; angular.module('fakeModule', []).config(function($typescript){});`,
-          'tsconfig.json': fx.tsconfig(),
-          'package.json': fx.packageJson({
-            entry: './app.ts'
-          }, {
-            angular: '1.5.0'
-          })
-        })
-        .execute('build');
-
-      expect(test.content('dist/statics/app.bundle.js')).to
-        .contain(`.config(["$typescript", function ($typescript)`);
     });
 
     it('should fail with error code 1', () => {
