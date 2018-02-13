@@ -1074,37 +1074,6 @@ describe('Aggregator: Build', () => {
     });
   });
 
-  describe('Migrate Bower Artifactory', () => {
-    it('should migrate .bowerrc', () => {
-      const bowerrc = {
-        registry: {
-          search: ['https://bower.herokuapp.com', 'http://wix:wix@mirror.wixpress.com:3333'],
-          register: 'http://wix:wix@mirror.wixpress.com:3333',
-          publish: 'http://wix:wix@mirror.wixpress.com:3333'
-        }
-      };
-
-      test
-        .setup({
-          'package.json': fx.packageJson(),
-          '.bowerrc': JSON.stringify(bowerrc, null, 2),
-        })
-        .execute('build');
-
-      const newBowerrc = JSON.parse(test.content('.bowerrc'));
-      const newPj = JSON.parse(test.content('package.json'));
-
-      expect(newBowerrc).to.eql({
-        registry: 'https://bower.dev.wixpress.com',
-        resolvers: [
-          'bower-art-resolver'
-        ]
-      });
-
-      expect(newPj.devDependencies['bower-art-resolver']).to.exist;
-    });
-  });
-
   describe('externalize relative lodash (lodash/map -> lodash.map)', function () {
     this.timeout(30000);
 

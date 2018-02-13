@@ -81,7 +81,6 @@
     "less": "~2.7.2",
     "less-loader": "~4.0.5",
     "lodash": "~4.17.4",
-    "migrate-bower-artifactory": "^1.0.4",
     "minimist": "^1.2.0",
     "mkdirp": "~0.5.1",
     "mocha": "~3.4.2",

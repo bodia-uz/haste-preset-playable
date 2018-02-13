@@ -49,7 +49,6 @@ module.exports = runner.command(async tasks => {
   } = tasks;
 
   const migrateScopePackages = tasks[require.resolve('../tasks/migrate-to-scoped-packages/index')];
-  const migrateBowerArtifactory = tasks[require.resolve('../tasks/migrate-bower-artifactory/index')];
 
   const appServer = async () => {
     if (cliArgs['no-server']) {
@@ -63,7 +62,6 @@ module.exports = runner.command(async tasks => {
     clean({pattern: `{dist,target}/*`}),
     wixUpdateNodeVersion(),
     migrateScopePackages({}, {title: 'scope-packages-migration'}),
-    migrateBowerArtifactory({}, {title: 'migrate-bower-artifactory'}),
     wixDepCheck()
   ]);
 
