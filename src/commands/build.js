@@ -5,7 +5,6 @@ const parseArgs = require('minimist');
 const globs = require('../globs');
 const {
   runIndividualTranspiler,
-  petriSpecsConfig,
   clientProjectName,
   clientFilesPath,
 } = require('../../config/project');
@@ -36,7 +35,6 @@ module.exports = runner.command(async tasks => {
     sass,
     webpack,
     typescript,
-    wixPetriSpecs,
     wixDepCheck,
     wixUpdateNodeVersion,
     wixMavenStatics,
@@ -75,7 +73,6 @@ module.exports = runner.command(async tasks => {
       target: 'dist/statics'
     }, {title: 'copy-static-assets'}),
     bundle(),
-    wixPetriSpecs({config: petriSpecsConfig()}),
     wixMavenStatics({
       clientProjectName: clientProjectName(),
       staticsDir: clientFilesPath()

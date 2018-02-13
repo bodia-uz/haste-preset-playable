@@ -949,19 +949,6 @@ describe('Aggregator: Build', () => {
     });
   });
 
-  describe('yoshi-petri', () => {
-    it('should use yoshi-petri', () => {
-      test
-        .setup({
-          'petri-specs/specs.infra.Dummy.json': fx.petriSpec(),
-          'package.json': fx.packageJson()
-        })
-        .execute('build');
-
-      expect(test.list('dist', '-R')).to.contain('statics/petri-experiments.json');
-    });
-  });
-
   describe.skip('yoshi-check-deps', () => {
     it('should run yoshi-check-deps and do nothing because yoshi isn\'t installed', () => {
       const resp = test

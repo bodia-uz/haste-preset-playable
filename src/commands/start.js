@@ -9,7 +9,6 @@ const {
   entry,
   defaultEntry,
   hmr,
-  petriSpecsConfig,
   clientProjectName
 } = require('../../config/project');
 const globs = require('../globs');
@@ -40,7 +39,6 @@ module.exports = runner.command(async tasks => {
     babel,
     typescript,
     wixDepCheck,
-    wixPetriSpecs,
     wixMavenStatics,
     wixAppServer,
     wixUpdateNodeVersion,
@@ -90,7 +88,6 @@ module.exports = runner.command(async tasks => {
       defaultEntry: defaultEntry(),
       hmr: hmr(),
     }),
-    wixPetriSpecs({config: petriSpecsConfig()}),
     wixMavenStatics({
       clientProjectName: clientProjectName(),
       staticsDir: clientFilesPath()
