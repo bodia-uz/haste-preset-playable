@@ -3,7 +3,6 @@ const path = require('path');
 const context = path.resolve('./src');
 const projectConfig = require('./project');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const stylable = require('../src/loaders/stylable');
 
 const config = {
   context,
@@ -26,8 +25,7 @@ const config = {
 
   plugins: [
     new CaseSensitivePathsPlugin(),
-    require('../src/webpack-plugins/babelHappyPack')(),
-    stylable.plugin()
+    require('../src/webpack-plugins/babelHappyPack')()
   ],
 
   module: {
@@ -41,8 +39,7 @@ const config = {
       require('../src/loaders/svg')(),
       require('../src/loaders/html')(),
       require('../src/loaders/haml')(),
-      require('../src/loaders/raw')(),
-      stylable.rule()
+      require('../src/loaders/raw')()
     ]
   },
 

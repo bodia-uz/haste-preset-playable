@@ -307,31 +307,6 @@ describe('Loaders', () => {
     });
   });
 
-  describe('Stylable', () => {
-    afterEach(() => test.teardown());
-
-    describe('client', () => {
-      beforeEach(() => setupAndBuild());
-
-      it('should run stylable loader over imported .st.css files', () => {
-        expect(test.content('dist/statics/app.bundle.js')).to.match(/.Test.*some-rule {\s*?color: red;\s*?}/);
-      });
-    });
-
-    function setupAndBuild(config) {
-      test
-        .setup({
-          'src/client.js': `require('./some-css.st.css');`,
-          'src/server.js': `require('./some-css.st.css');`,
-          'src/some-css.st.css': `/* comment */
-                                  @namespace "Test";
-                                  .some-rule { color: red; }`,
-          'package.json': fx.packageJson(config || {})
-        }, [hooks.installDependency('stylable@4')])
-        .execute('build');
-    }
-  });
-
   describe('Assets', () => {
     afterEach(() => test.teardown());
 

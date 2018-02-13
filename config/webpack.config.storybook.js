@@ -2,8 +2,6 @@ const union = require('lodash/union');
 const webpackCommonConfig = require('./webpack.config.common');
 const projectConfig = require('./project');
 
-const stylable = require('../src/loaders/stylable');
-
 module.exports = config => {
   const projectName = projectConfig.name();
   const cssModules = projectConfig.cssModules();
@@ -17,8 +15,7 @@ module.exports = config => {
 
   config.plugins = [
     ...config.plugins || [],
-    require('../src/webpack-plugins/babelHappyPack')(),
-    stylable.plugin()
+    require('../src/webpack-plugins/babelHappyPack')()
   ];
 
   return config;
