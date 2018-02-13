@@ -43,12 +43,10 @@ module.exports = runner.command(async tasks => {
   } = tasks;
 
   const transpileDot = tasks[require.resolve('../tasks/transpileDot.js')];
-  const migrateScopePackages = tasks[require.resolve('../tasks/migrate-to-scoped-packages/index')];
 
   await Promise.all([
     clean({pattern: `{dist,target}/*`}),
     wixUpdateNodeVersion(),
-    migrateScopePackages({}, {title: 'scope-packages-migration'}),
     wixDepCheck()
   ]);
 

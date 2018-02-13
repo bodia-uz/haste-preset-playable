@@ -46,8 +46,6 @@ module.exports = runner.command(async tasks => {
     wixUpdateNodeVersion,
   } = tasks;
 
-  const migrateScopePackages = tasks[require.resolve('../tasks/migrate-to-scoped-packages/index')];
-
   const appServer = async () => {
     if (cliArgs['no-server']) {
       return;
@@ -59,7 +57,6 @@ module.exports = runner.command(async tasks => {
   await Promise.all([
     clean({pattern: `{dist,target}/*`}),
     wixUpdateNodeVersion(),
-    migrateScopePackages({}, {title: 'scope-packages-migration'}),
     wixDepCheck()
   ]);
 
