@@ -118,6 +118,10 @@ module.exports.shouldRunWebpack = webpackConfig => {
   return project.entry() || exists(`${defaultEntryPath}.{js,jsx,ts,tsx}`);
 };
 
+module.exports.shouldRunRollup = () => {
+  return !!project.entry();
+};
+
 module.exports.shouldRunStylelint = () => {
   return cosmiconfig('stylelint')
       .load(process.cwd())
