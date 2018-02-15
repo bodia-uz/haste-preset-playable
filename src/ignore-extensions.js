@@ -30,7 +30,7 @@ function loadDotModules(module) {
 
   module.exports = {};
 
-  eval(output.replace('export default ', 'module.exports.default = ')) // eslint-disable-line no-eval
+  eval(output.replace('export default ', 'module.exports.default = ')); // eslint-disable-line no-eval
 }
 
 function mockMediaModules(module) {

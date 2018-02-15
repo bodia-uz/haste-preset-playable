@@ -2,7 +2,6 @@
 
 const tp = require('./helpers/test-phases');
 const fx = require('./helpers/fixtures');
-const hooks = require('./helpers/hooks');
 const expect = require('chai').expect;
 const _ = require('lodash');
 const {getMockedCI} = require('yoshi-utils').utilsTestkit;
