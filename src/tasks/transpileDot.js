@@ -5,8 +5,12 @@ const dotOptions = require('../loaders/dot').DEFAULT_OPTIONS;
 const dotLoaderWithOptions = dotLoader.bind({query: dotOptions});
 
 function transpileDotFile(content) {
-  return dotLoaderWithOptions(content)
-    .replace('export default ', 'module.exports = { default: ') + '};';
+  const fnString = dotLoaderWithOptions(content).replace('export default ', '');
+
+  return `module.exports = {
+    __esModule: true,
+    default: ${fnString} 
+  };`;
 }
 
 async function transpileDot({pattern, target, cwd = process.cwd(), source}, {fs: fsService}) {
