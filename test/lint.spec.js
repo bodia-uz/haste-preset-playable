@@ -93,7 +93,6 @@ p {
         .setup({
           'src/a.sass': goodStyle,
           'src/a.scss': goodStyle,
-          'a.less': goodStyle,
           'package.json': `{
             "name": "a",\n
             "version": "1.0.0",\n

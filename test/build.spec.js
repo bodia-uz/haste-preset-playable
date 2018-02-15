@@ -64,87 +64,6 @@ describe('Aggregator: Build', () => {
     });
   });
 
-  describe('Less', () => {
-    it('should transpile to dist/, preserve folder structure, extensions and exit with code 0', () => {
-      const compiledStyle = '.a .b {\n  color: red;\n}';
-      const resp = test
-        .setup({
-          'src/client.js': '',
-          'app/a/style.less': '.a {\n.b {\ncolor: red;\n}\n}\n',
-          'src/b/style.less': '.a {\n.b {\ncolor: red;\n}\n}\n',
-          'test/c/style.less': '.a {\n.b {\ncolor: red;\n}\n}\n',
-          'package.json': fx.packageJson()
-        })
-        .execute('build');
-
-      expect(resp.code).to.equal(0);
-      expect(resp.stdout).to.contain(`Finished 'less'`);
-      expect(test.content('dist/app/a/style.less')).to.contain(compiledStyle);
-      expect(test.content('dist/src/b/style.less')).to.contain(compiledStyle);
-      expect(test.content('dist/test/c/style.less')).to.contain(compiledStyle);
-    });
-
-    it('should disable css modules for .global.less files', () => {
-      const res = test
-        .setup({
-          'src/client.js': 'require(\'./styles/my-file.global.less\');',
-          'src/styles/my-file.global.less': `.a {.b {color: red;}}`,
-          'package.json': fx.packageJson({
-            separateCss: true
-          }),
-          'pom.xml': fx.pom()
-        })
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content(`dist/${defaultOutput}/app.css`)).to.contain('.a .b {');
-    });
-
-    it('should fail with exit code 1', () => {
-      const resp = test
-        .setup({
-          'src/client.js': '',
-          'app/a/style.less': '.a {\n.b\ncolor: red;\n}\n}\n',
-          'package.json': fx.packageJson()
-        })
-        .execute('build');
-
-      expect(resp.code).to.equal(1);
-      expect(resp.stdout).to.contain(`Failed 'less'`);
-      expect(resp.stderr).to.contain(`Unrecognised input`);
-    });
-
-    it('should handle @import statements', () => {
-      const resp = test
-        .setup({
-          'src/client.js': '',
-          'src/style.less': `@import (once) './foobar.less';`,
-          'src/foobar.less': `.a { color: black; }`,
-          'package.json': fx.packageJson()
-        })
-        .execute('build');
-
-      expect(resp.code).to.equal(0);
-      expect(resp.stdout).to.contain(`Finished 'less'`);
-      expect(test.content('dist/src/style.less')).to.contain('.a {\n  color: black;\n}');
-    });
-
-    it('should consider node_modules for path', () => {
-      const resp = test
-        .setup({
-          'src/client.js': '',
-          'node_modules/some-module/style.less': `.a { color: black; }`,
-          'src/a/style.less': `@import (once) 'some-module/style.less';`,
-          'package.json': fx.packageJson()
-        })
-        .execute('build');
-
-      expect(resp.code).to.equal(0);
-      expect(resp.stdout).to.contain(`Finished 'less'`);
-      expect(test.content('dist/src/a/style.less')).to.contain('.a {\n  color: black;\n}');
-    });
-  });
-
   describe('yoshi-babel', () => {
     it('should use yoshi-babel', () => {
       const resp = test
@@ -965,42 +884,6 @@ describe('Aggregator: Build', () => {
     });
   });
 
-  describe('yoshi-maven-statics', () => {
-    it('should use yoshi-maven-statics', () => {
-      const res = test
-        .setup({
-          'package.json': fx.packageJson({
-            clientProjectName: 'some-client-proj'
-          }),
-          'pom.xml': fx.pom()
-        })
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content('maven/assembly/tar.gz.xml').replace(/\s/g, '')).to.contain(`
-        <assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
-          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
-            <id>wix-angular</id>
-            <baseDirectory>/</baseDirectory>
-            <formats>
-                <format>tar.gz</format>
-            </formats>
-            <fileSets>
-                <fileSet>
-                    <directory>\${project.basedir}/node_modules/some-client-proj/dist</directory>
-                    <outputDirectory>/</outputDirectory>
-                    <includes>
-                        <include>*</include>
-                        <include>*/**</include>
-                    </includes>
-                </fileSet>
-            </fileSets>
-        </assembly>
-      `.replace(/\s/g, ''));
-    });
-  });
-
   describe('yoshi-clean', () => {
     it('should use yoshi-clean', () => {
       const res = test
@@ -1027,19 +910,6 @@ describe('Aggregator: Build', () => {
 
       expect(res.code).to.be.equal(0);
       expect(test.contains('.nvmrc')).to.be.true;
-    });
-  });
-
-  describe('yoshi-petri', () => {
-    it('should use yoshi-petri', () => {
-      test
-        .setup({
-          'petri-specs/specs.infra.Dummy.json': fx.petriSpec(),
-          'package.json': fx.packageJson()
-        })
-        .execute('build');
-
-      expect(test.list('dist', '-R')).to.contain('statics/petri-experiments.json');
     });
   });
 
@@ -1071,37 +941,6 @@ describe('Aggregator: Build', () => {
       expect(res.code).to.equal(0);
       expect(test.content(`dist/${defaultOutput}/app.bundle.js`)).to.contain(module1);
       expect(test.content(`dist/${defaultOutput}/app.bundle.js`)).to.not.contain(module2);
-    });
-  });
-
-  describe('Migrate Bower Artifactory', () => {
-    it('should migrate .bowerrc', () => {
-      const bowerrc = {
-        registry: {
-          search: ['https://bower.herokuapp.com', 'http://wix:wix@mirror.wixpress.com:3333'],
-          register: 'http://wix:wix@mirror.wixpress.com:3333',
-          publish: 'http://wix:wix@mirror.wixpress.com:3333'
-        }
-      };
-
-      test
-        .setup({
-          'package.json': fx.packageJson(),
-          '.bowerrc': JSON.stringify(bowerrc, null, 2),
-        })
-        .execute('build');
-
-      const newBowerrc = JSON.parse(test.content('.bowerrc'));
-      const newPj = JSON.parse(test.content('package.json'));
-
-      expect(newBowerrc).to.eql({
-        registry: 'https://bower.dev.wixpress.com',
-        resolvers: [
-          'bower-art-resolver'
-        ]
-      });
-
-      expect(newPj.devDependencies['bower-art-resolver']).to.exist;
     });
   });
 
@@ -1140,86 +979,6 @@ describe('Aggregator: Build', () => {
 
       expect(res.code).to.equal(0);
       expect(test.content('dist/statics/app.bundle.js')).to.contain(').map');
-    });
-  });
-
-  describe('angular ngInject annotations', function () {
-    const $inject = 'something.$inject = ["$http"];';
-    it('are not executed when project is not Angular and TypeScript', () => {
-      const res = test
-        .setup({
-          'src/something.ts': fx.angularJs(),
-          'something/something.js': fx.angularJs(),
-          'something.js': fx.angularJs(),
-          'tsconfig.json': fx.tsconfig(),
-          'package.json': fx.packageJson({
-          }, {
-          })
-        }, [])
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content('dist/src/something.js')).not.to.contain($inject);
-      expect(test.content('dist/something/something.js')).not.to.contain($inject);
-      expect(test.content('something.js')).not.to.contain($inject);
-    });
-    it('are executed when project is Angular and TypeScript', () => {
-      const res = test
-        .setup({
-          'src/something.ts': fx.angularJs(),
-          'something/something.js': fx.angularJs(),
-          'something.js': fx.angularJs(),
-          'tsconfig.json': fx.tsconfig(),
-          'package.json': fx.packageJson({
-          }, {
-            angular: '1.5.0'
-          })
-        }, [])
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content('dist/src/something.js')).to.contain($inject);
-      expect(test.content('dist/something/something.js')).not.to.contain($inject);
-      expect(test.content('something.js')).not.to.contain($inject);
-    });
-    it('are executed when project is Angular and EcmaScript', () => {
-      const res = test
-        .setup({
-          'src/something.js': fx.angularJs(),
-          'something/something.js': fx.angularJs(),
-          'something.js': fx.angularJs(),
-          '.babelrc': '{}',
-          'package.json': fx.packageJson({
-          }, {
-            angular: '1.5.0'
-          })
-        }, [])
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content('dist/src/something.js')).to.contain($inject);
-      expect(test.content('dist/something/something.js')).not.to.contain($inject);
-      expect(test.content('src/something.js')).not.to.contain($inject);
-      expect(test.content('something.js')).not.to.contain($inject);
-    });
-    it('are not executed when project is not Angular and EcmaScript', () => {
-      const res = test
-        .setup({
-          'src/something.js': fx.angularJs(),
-          'something/something.js': fx.angularJs(),
-          'something.js': fx.angularJs(),
-          '.babelrc': '{}',
-          'package.json': fx.packageJson({
-          }, {
-          })
-        }, [])
-        .execute('build');
-
-      expect(res.code).to.equal(0);
-      expect(test.content('dist/src/something.js')).not.to.contain($inject);
-      expect(test.content('dist/something/something.js')).not.to.contain($inject);
-      expect(test.content('src/something.js')).not.to.contain($inject);
-      expect(test.content('something.js')).not.to.contain($inject);
     });
   });
 

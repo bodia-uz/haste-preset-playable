@@ -9,14 +9,11 @@ const {
   entry,
   defaultEntry,
   hmr,
-  petriSpecsConfig,
-  clientProjectName
 } = require('../../config/project');
 const globs = require('../globs');
 const {
   isTypescriptProject,
   isBabelProject,
-  shouldRunLess,
   shouldRunSass,
   suffix,
   watch,
@@ -36,20 +33,13 @@ module.exports = runner.command(async tasks => {
   const {
     wixCdn,
     sass,
-    less,
     copy,
     clean,
     babel,
     typescript,
-    wixDepCheck,
-    wixPetriSpecs,
-    wixMavenStatics,
     wixAppServer,
     wixUpdateNodeVersion,
   } = tasks;
-
-  const migrateScopePackages = tasks[require.resolve('../tasks/migrate-to-scoped-packages/index')];
-  const migrateBowerArtifactory = tasks[require.resolve('../tasks/migrate-bower-artifactory/index')];
 
   const appServer = async () => {
     if (cliArgs['no-server']) {
@@ -62,9 +52,6 @@ module.exports = runner.command(async tasks => {
   await Promise.all([
     clean({pattern: `{dist,target}/*`}),
     wixUpdateNodeVersion(),
-    migrateScopePackages({}, {title: 'scope-packages-migration'}),
-    migrateBowerArtifactory({}, {title: 'migrate-bower-artifactory'}),
-    wixDepCheck()
   ]);
 
   await Promise.all([
@@ -97,11 +84,6 @@ module.exports = runner.command(async tasks => {
       defaultEntry: defaultEntry(),
       hmr: hmr(),
     }),
-    wixPetriSpecs({config: petriSpecsConfig()}),
-    wixMavenStatics({
-      clientProjectName: clientProjectName(),
-      staticsDir: clientFilesPath()
-    })
   ]);
 
   if (shouldRunTests) {
@@ -148,28 +130,12 @@ module.exports = runner.command(async tasks => {
       );
     }
 
-    if (shouldRunLess()) {
-      watch({pattern: globs.less()}, changed =>
-        less({
-          pattern: changed,
-          target: 'dist',
-          paths: ['.', 'node_modules'],
-        }),
-      );
-    }
-
     return [
       !shouldRunSass() ? null :
         sass({
           pattern: globs.sass(),
           target: 'dist',
           options: {includePaths: ['node_modules', 'node_modules/compass-mixins/lib']}
-        }),
-      !shouldRunLess() ? null :
-        less({
-          pattern: globs.less(),
-          target: 'dist',
-          paths: ['.', 'node_modules'],
         }),
     ].filter(a => a);
   }

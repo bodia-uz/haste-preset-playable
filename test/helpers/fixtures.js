@@ -195,21 +195,6 @@ const fx = {
   karmaWithJasmine: () => `
     'use strict';
     module.exports = {frameworks: ['jasmine']};
-  `,
-  petriSpec: () => `
-  {
-    "specs.infra.Dummy": {
-      "scopes": ["infra"],
-      "owner": "tomasm@wix.com",
-      "onlyForLoggedInUsers": true,
-      "controlGroup": "false",
-      "variants": ["true"]
-    }
-  }
-  `,
-  angularJs: () => `
-/* @ngInject */
-function something($http) { }
   `
 };
 

@@ -22,6 +22,5 @@ module.exports = {
     clientDist: () => dist
   },
   tslint: () => [`${base}/**/*.ts{,x}`],
-  less: () => [`${base}/**/*.less`, `!${base}/assets/**/*`],
   sass: () => [`${base}/**/*.scss`, `!${base}/assets/**/*`],
 };

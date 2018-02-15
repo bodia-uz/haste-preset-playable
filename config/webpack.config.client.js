@@ -29,7 +29,6 @@ const config = ({debug, separateCss = projectConfig.separateCss(), analyze, disa
     module: {
       rules: [
         ...require('../src/loaders/sass')(separateCss, cssModules, tpaStyle, projectName).client,
-        ...require('../src/loaders/less')(separateCss, cssModules, tpaStyle, projectName).client
       ]
     },
 

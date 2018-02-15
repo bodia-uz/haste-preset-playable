@@ -40,40 +40,6 @@ describe('Loaders', () => {
       expect(test.content('dist/statics/app.bundle.js')).to.contain('var aServerFunction = 1;');
     });
 
-    it('should apply ng-annotate loader on angular project', () => {
-      test
-        .setup({
-          'src/client.js': `angular.module('fakeModule', []).config(function($javascript){});`,
-          'package.json': `{\n
-            "name": "a",\n
-            "dependencies": {\n
-              "angular": "^1.5.0"\n
-            }
-          }`
-        })
-        .execute('build');
-
-      expect(test.content('dist/statics/app.bundle.js')).to
-        .contain(`.config(["$javascript", function ($javascript)`);
-    });
-
-    it('should apply ng-annotate loader on angular project with peerDependency', () => {
-      test
-        .setup({
-          'src/client.js': `angular.module('fakeModule', []).config(function($javascript){});`,
-          'package.json': `{\n
-            "name": "a",\n
-            "peerDependencies": {\n
-              "angular": "^1.5.0"\n
-            }
-          }`
-        })
-        .execute('build');
-
-      expect(test.content('dist/statics/app.bundle.js')).to
-        .contain(`.config(["$javascript", function ($javascript)`);
-    });
-
     it('should run over specified 3rd party modules', () => {
       const res = test
         .setup({
@@ -109,23 +75,6 @@ describe('Loaders', () => {
         })
         .execute('build');
       expect(test.content('dist/statics/app.bundle.js')).to.contain('var aServerFunction = 1;');
-    });
-
-    it('should apply ng-annotate loader on angular project', () => {
-      test
-        .setup({
-          'src/app.ts': `declare var angular: any; angular.module('fakeModule', []).config(function($typescript){});`,
-          'tsconfig.json': fx.tsconfig(),
-          'package.json': fx.packageJson({
-            entry: './app.ts'
-          }, {
-            angular: '1.5.0'
-          })
-        })
-        .execute('build');
-
-      expect(test.content('dist/statics/app.bundle.js')).to
-        .contain(`.config(["$typescript", function ($typescript)`);
     });
 
     it('should fail with error code 1', () => {
@@ -356,97 +305,6 @@ describe('Loaders', () => {
       expect(test.content('dist/statics/app.css')).to.contain('-webkit-appearance');
       expect(test.content('dist/statics/app.css')).to.not.contain('unquote("{{color-1}}")');
     });
-  });
-
-  describe('Stylable', () => {
-    afterEach(() => test.teardown());
-
-    describe('client', () => {
-      beforeEach(() => setupAndBuild());
-
-      it('should run stylable loader over imported .st.css files', () => {
-        expect(test.content('dist/statics/app.bundle.js')).to.match(/.Test.*some-rule {\s*?color: red;\s*?}/);
-      });
-    });
-
-    function setupAndBuild(config) {
-      test
-        .setup({
-          'src/client.js': `require('./some-css.st.css');`,
-          'src/server.js': `require('./some-css.st.css');`,
-          'src/some-css.st.css': `/* comment */
-                                  @namespace "Test";
-                                  .some-rule { color: red; }`,
-          'package.json': fx.packageJson(config || {})
-        }, [hooks.installDependency('stylable@4')])
-        .execute('build');
-    }
-  });
-
-  describe('Less', () => {
-    afterEach(() => test.teardown());
-
-    describe('client', () => {
-      beforeEach(() => setupAndBuild());
-
-      it('should run less and css loaders over imported .less files', () => {
-        expect(test.content('dist/statics/app.bundle.js')).to.match(/"some-rule":"some-css__some-rule__\w{5}",([\s\S]*?)"child":"some-css__child__\w{5}"/);
-      });
-
-      it('should allow import less from node_modules', () => {
-        test
-          .setup({
-            'src/client.js': `require('./foo.less');`,
-            'src/foo.less': '@import "bar/baz.less";',
-            'node_modules/bar/baz.less': '.bar{color:red}',
-            'package.json': fx.packageJson({}),
-          })
-          .execute('build');
-
-        expect(test.content('dist/statics/app.css')).to.contain('color: red');
-      });
-
-      describe('postcss', () => {
-        it('should apply auto-prefixer', () => {
-          expect(test.content('dist/statics/app.css')).to.contain('-webkit-appearance');
-        });
-
-        it('should support source maps', () => {
-          expect(test.content('dist/statics/app.css.map')).not.to.contain('-webkit-appearance');
-        });
-      });
-
-      it('should support TPA style params', () => {
-        test
-          .setup({
-            'src/client.js': `require('./foo.less');`,
-            'src/foo.less': '.foo{color: unquote("{{color-1}}");font: unquote("; {{body-m}}");font-size: 16px;}',
-            'package.json': fx.packageJson({
-              tpaStyle: true
-            }),
-          })
-          .execute('build');
-
-        expect(test.content('dist/statics/app.css')).to.contain('font-size: 16px');
-        expect(test.content('dist/statics/app.css')).not.to.contain('color-1');
-        expect(test.content('dist/statics/app.css')).not.to.contain('body-m');
-      });
-    });
-
-    function setupAndBuild(config) {
-      test
-        .setup({
-          'src/client.js': `require('./some-css.less');require('./foo.css');`,
-          'src/server.js': `require('./some-css.less');require('./foo.css');`,
-          'src/some-css.less': `// comment
-                                  @import "./imported";
-                                  .some-rule { .child { color: red; } }`,
-          'src/imported.less': '.foo{appearance: none;}',
-          'src/foo.css': '.foo-rule { color: blue }',
-          'package.json': fx.packageJson(config || {}),
-        })
-        .execute('build', [], getMockedCI({ci: false}));
-    }
   });
 
   describe('Assets', () => {

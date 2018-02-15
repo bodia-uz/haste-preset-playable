@@ -5,17 +5,12 @@ const parseArgs = require('minimist');
 const globs = require('../globs');
 const {
   runIndividualTranspiler,
-  petriSpecsConfig,
-  clientProjectName,
-  isAngularProject,
-  clientFilesPath,
 } = require('../../config/project');
 const {
   watchMode,
   isTypescriptProject,
   isBabelProject,
   shouldRunWebpack,
-  shouldRunLess,
   shouldRunSass,
 } = require('../utils');
 
@@ -32,34 +27,24 @@ module.exports = runner.command(async tasks => {
   }
 
   const {
-    less,
     clean,
     copy,
     babel,
     sass,
     webpack,
     typescript,
-    ngAnnotate,
-    wixPetriSpecs,
-    wixDepCheck,
     wixUpdateNodeVersion,
-    wixMavenStatics,
   } = tasks;
 
   const transpileDot = tasks[require.resolve('../tasks/transpileDot.js')];
-  const migrateScopePackages = tasks[require.resolve('../tasks/migrate-to-scoped-packages/index')];
-  const migrateBowerArtifactory = tasks[require.resolve('../tasks/migrate-bower-artifactory/index')];
 
   await Promise.all([
     clean({pattern: `{dist,target}/*`}),
     wixUpdateNodeVersion(),
-    migrateScopePackages({}, {title: 'scope-packages-migration'}),
-    migrateBowerArtifactory({}, {title: 'migrate-bower-artifactory'}),
-    wixDepCheck()
   ]);
 
   await Promise.all([
-    transpileJavascript().then(() => transpileNgAnnotate()),
+    transpileJavascript(),
     ...transpileCss(),
     transpileDot({
       pattern: `${globs.base()}/**/*.dot`,
@@ -83,11 +68,6 @@ module.exports = runner.command(async tasks => {
       target: 'dist/statics'
     }, {title: 'copy-static-assets'}),
     bundle(),
-    wixPetriSpecs({config: petriSpecsConfig()}),
-    wixMavenStatics({
-      clientProjectName: clientProjectName(),
-      staticsDir: clientFilesPath()
-    })
   ]);
 
   function bundle() {
@@ -118,21 +98,7 @@ module.exports = runner.command(async tasks => {
           target: 'dist',
           options: {includePaths: ['node_modules', 'node_modules/compass-mixins/lib']}
         }),
-      !shouldRunLess() ? null :
-        less({
-          pattern: globs.less(),
-          target: 'dist',
-          options: {paths: ['.', 'node_modules']},
-        }),
     ].filter(a => a);
-  }
-
-  function transpileNgAnnotate() {
-    if (isAngularProject()) {
-      return ngAnnotate({
-        glob: 'dist/' + globs.base()
-      });
-    }
   }
 
   function transpileJavascript() {

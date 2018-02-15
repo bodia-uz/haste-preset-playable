@@ -35,7 +35,6 @@ module.exports = {
       (dir || globs.singleModule.clientDist());
   },
   isUniversalProject: () => getConfig('universalProject'),
-  isAngularProject: () => !!_.get(packagejson, 'dependencies.angular', false) || !!_.get(packagejson, 'peerDependencies.angular', false),
   isEsModule: () => !!_.get(packagejson, 'module', false),
   servers: {
     cdn: {
@@ -62,7 +61,6 @@ module.exports = {
       allSourcesButExternalModules(path);
   },
   jestConfig: () => _.get(packagejson, 'jest', {}),
-  petriSpecsConfig: () => getConfig('petriSpecs', {}),
   performanceBudget: () => getConfig('performance', {})
 };
 

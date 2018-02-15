@@ -68,10 +68,6 @@ module.exports.isBabelProject = () => {
   return !!glob.sync(path.resolve('.babelrc')).length || !!project.babel();
 };
 
-module.exports.shouldRunLess = () => {
-  return glob.sync(`${globs.base()}/**/*.less`).length > 0;
-};
-
 module.exports.reportWebpackStats = (stats, outputPath) => {
   logIfAny(stats.toString({
     colors: true,
@@ -121,9 +117,6 @@ module.exports.shouldRunWebpack = webpackConfig => {
   const defaultEntryPath = path.join(webpackConfig.context, project.defaultEntry());
   return project.entry() || exists(`${defaultEntryPath}.{js,jsx,ts,tsx}`);
 };
-
-module.exports.migrateToScopedPackages = () =>
-  process.env.MIGRATE_TO_SCOPED_PACKAGES === 'true';
 
 module.exports.shouldRunStylelint = () => {
   return cosmiconfig('stylelint')

@@ -19,7 +19,7 @@ module.exports = runner.command(async tasks => {
   const {eslint, tslint, stylelint} = tasks;
 
   if (await shouldRunStylelint()) {
-    await stylelint({pattern: [`${globs.base()}/**/*.scss`, `${globs.base()}/**/*.less`], options: {formatter: 'string'}});
+    await stylelint({pattern: [`${globs.base()}/**/*.scss`], options: {formatter: 'string'}});
   }
 
   if (isTypescriptProject()) {
