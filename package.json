@@ -53,6 +53,7 @@
     "haste-task-karma": "~0.2.1",
     "haste-task-mocha": "~0.2.1",
     "haste-task-protractor": "~0.2.1",
+    "haste-task-rollup": "git+ssh://git@github.com/bodia-uz/haste-task-rollup.git#v1.1.0",
     "haste-task-sass": "~0.2.1",
     "haste-task-stylelint": "~0.2.1",
     "haste-task-tslint": "~0.2.1",
@@ -79,13 +80,19 @@
     "mkdirp": "~0.5.1",
     "mocha": "~3.4.2",
     "mocha-teamcity-reporter": "~1.1.1",
-    "node-sass": "~4.5.3",
+    "node-sass": "~4.7.2",
     "phantomjs-polyfill": "~0.0.2",
     "postcss-loader": "~2.0.6",
     "protractor": "~5.1.2",
     "protractor-browser-logs": "~1.0.351",
     "raw-loader": "~0.5.1",
     "resolve-url-loader": "~2.1.0",
+    "rollup-plugin-commonjs": "^8.3.0",
+    "rollup-plugin-dot": "^1.0.2",
+    "rollup-plugin-node-resolve": "^3.0.3",
+    "rollup-plugin-postcss": "^1.2.8",
+    "rollup-plugin-typescript2": "^0.11.1",
+    "rollup-plugin-uglify": "^3.0.0",
     "rtlcss-webpack-plugin": "^1.0.7",
     "ruby-haml-loader": "~1.0.0",
     "sass-loader": "~6.0.6",
@@ -114,6 +121,6 @@
     "node-fetch": "^1.7.3",
     "ps-tree": "^1.1.0",
     "retry-promise": "^1.0.0",
-    "typescript": "^2.6.1"
+    "typescript": "^2.7.1"
   }
 }

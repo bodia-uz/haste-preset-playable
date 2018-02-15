@@ -11,6 +11,7 @@ const {
   isTypescriptProject,
   isBabelProject,
   shouldRunWebpack,
+  shouldRunRollup,
   shouldRunSass,
 } = require('../utils');
 
@@ -32,6 +33,7 @@ module.exports = runner.command(async tasks => {
     babel,
     sass,
     webpack,
+    rollup,
     typescript,
     wixUpdateNodeVersion,
   } = tasks;
@@ -68,6 +70,7 @@ module.exports = runner.command(async tasks => {
       target: 'dist/statics'
     }, {title: 'copy-static-assets'}),
     bundle(),
+    bundleRollup()
   ]);
 
   function bundle() {
@@ -84,6 +87,20 @@ module.exports = runner.command(async tasks => {
       return Promise.all([
         webpack({...defaultOptions, callbackPath: productionCallbackPath, configParams: {debug: false, analyze: cliArgs.analyze}}, {title: 'webpack-production'}),
         webpack({...defaultOptions, callbackPath: developmentCallbackPath, configParams: {debug: true}}, {title: 'webpack-development'})
+      ]);
+    }
+
+    return Promise.resolve();
+  }
+
+  function bundleRollup() {
+    const configPath = require.resolve('../../config/rollup.config');
+    const webpackConfig = require(configPath)();
+
+    if (shouldRunRollup(webpackConfig)) {
+      return Promise.all([
+        rollup({ configPath, configParams: {debug: false}}, {title: 'rollup-production'}),
+        rollup({ configPath, configParams: {debug: true}}, {title: 'rollup-development'})
       ]);
     }
 
