@@ -4,7 +4,7 @@ fork of https://github.com/wix-private/wix-haste/tree/master/haste-preset-yoshi
 
 install:
 ```
-npm install git+ssh://git@github.com/bodia-uz/wix-haste-preset-yoshi-video-player.git
+npm install git+ssh://git@github.com/bodia-uz/haste-preset-playable.git
 ```
 rebase:
 ```
