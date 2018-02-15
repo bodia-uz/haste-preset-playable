@@ -14,7 +14,9 @@ const plugin =
       ],
       extract: separateCss && file,
       sourceMap: separateCss,
-      minimize: !debug
+      minimize: !debug && {
+        safe: true
+      }
     });
 
 module.exports = plugin;
