@@ -39,8 +39,6 @@
     "extract-text-webpack-plugin": "~3.0.0",
     "file-loader": "~0.11.2",
     "glob": "~7.1.2",
-    "graphql": "~0.10.5",
-    "graphql-tag": "~2.4.2",
     "happypack": "3.0.2",
     "haste-core": "~0.2.3",
     "haste-plugin-dashboard": "~0.2.0",
