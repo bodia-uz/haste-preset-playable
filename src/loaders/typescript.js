@@ -1,5 +1,5 @@
 module.exports = () => ({
   test: /\.tsx?$/,
   exclude: /(node_modules)/,
-  use: ['ts-loader?{"logLevel":"warn"}']
+  use: ['ts-loader']
 });
