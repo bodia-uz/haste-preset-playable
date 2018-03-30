@@ -5,7 +5,7 @@ const { createRunner } = require('haste-core');
 const LoggerPlugin = require('../plugins/haste-plugin-logger');
 
 const { isEntryString } = require('../config/bundle/parseEntry');
-const { SRC_DIR, BUNDLE_DIR } = require('../config/constants');
+const { SRC_DIR, BUNDLE_DIR, BundleMode } = require('../config/constants');
 const presetConfig = require('../config/presetConfig');
 
 const runner = createRunner({
@@ -39,17 +39,17 @@ module.exports = runner.command(async tasks => {
 
   if (!cliArgs.webpack && !cliArgs.rollup) {
     return Promise.all([
-      bundleWebpack(configParams),
-      bundleRollup(configParams),
+      bundleWebpack(configParams, cliArgs.mode),
+      bundleRollup(configParams, cliArgs.mode),
     ]);
   }
 
   if (cliArgs.webpack) {
-    await bundleWebpack(configParams);
+    await bundleWebpack(configParams, cliArgs.mode);
   }
 
   if (cliArgs.rollup) {
-    await bundleRollup(configParams);
+    await bundleRollup(configParams, cliArgs.mode);
   }
 
   function copyAssets() {
@@ -65,33 +65,53 @@ module.exports = runner.command(async tasks => {
     ]);
   }
 
-  function bundleRollup(configParams) {
+  function bundleRollup(configParams, mode) {
     const configPath = require.resolve('../config/rollup.config');
+    const results = [];
 
-    return Promise.all([
-      rollup(
-        { configPath, configParams: { ...configParams, debug: false } },
-        { title: 'rollup-production' },
-      ),
-      rollup(
-        { configPath, configParams: { ...configParams, debug: true } },
-        { title: 'rollup-development' },
-      ),
-    ]);
+    if (!mode || mode === BundleMode.PRODUCTION) {
+      results.push(
+        rollup(
+          { configPath, configParams: { ...configParams, debug: false } },
+          { title: 'rollup-production' },
+        ),
+      );
+    }
+
+    if (!mode || mode === BundleMode.DEVELOPMENT) {
+      results.push(
+        rollup(
+          { configPath, configParams: { ...configParams, debug: true } },
+          { title: 'rollup-development' },
+        ),
+      );
+    }
+
+    return Promise.all(results);
   }
 
-  function bundleWebpack(configParams) {
+  function bundleWebpack(configParams, mode) {
     const configPath = require.resolve('../config/webpack.config');
+    const results = [];
 
-    return Promise.all([
-      webpack(
-        { configPath, configParams: { ...configParams, debug: false } },
-        { title: 'webpack-production' },
-      ),
-      webpack(
-        { configPath, configParams: { ...configParams, debug: true } },
-        { title: 'webpack-development' },
-      ),
-    ]);
+    if (!mode || mode === BundleMode.PRODUCTION) {
+      results.push(
+        webpack(
+          { configPath, configParams: { ...configParams, debug: false } },
+          { title: 'webpack-production' },
+        ),
+      );
+    }
+
+    if (!mode || mode === BundleMode.DEVELOPMENT) {
+      results.push(
+        webpack(
+          { configPath, configParams: { ...configParams, debug: true } },
+          { title: 'webpack-development' },
+        ),
+      );
+    }
+
+    return Promise.all(results);
   }
 });

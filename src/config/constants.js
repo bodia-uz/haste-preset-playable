@@ -9,10 +9,16 @@ const DOTJS_OPTIONS = {
   selfcontained: true,
 };
 
+const BundleMode = {
+  DEVELOPMENT: 'development',
+  PRODUCTION: 'production',
+};
+
 module.exports = {
   SRC_DIR,
   DIST_DIR,
   BUNDLE_DIR,
   SPEC_PATTERN,
   DOTJS_OPTIONS,
+  BundleMode,
 };
