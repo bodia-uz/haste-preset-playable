@@ -34,7 +34,7 @@ module.exports = runner.command(
       await mocha(mochaOptions);
 
       if (shouldWatch) {
-        watch({pattern: [SPEC_PATTERN, `${SRC_DIR}/**/*.{js,ts}`]}, () => {
+        watch({ pattern: [SPEC_PATTERN, `${SRC_DIR}/**/*.{js,ts}`] }, () => {
           mocha(mochaOptions);
         });
       }

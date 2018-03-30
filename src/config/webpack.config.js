@@ -39,13 +39,15 @@ module.exports = ({
         ...require('../loaders/sass')({ debug }),
       ],
     },
-    plugins: devServer ? [new HtmlWebpackPlugin({ template: 'index.html' })] : [],
+    plugins: devServer
+      ? [new HtmlWebpackPlugin({ template: 'index.html' })]
+      : [],
     devtool: 'source-map',
     node: {
       fs: 'empty',
       net: 'empty',
       tls: 'empty',
-      __dirname: true
+      __dirname: true,
     },
     output: {
       umdNamedDefine: true,
@@ -54,6 +56,6 @@ module.exports = ({
       library: exports,
       libraryTarget: 'umd',
     },
-    target: 'web'
+    target: 'web',
   };
 };

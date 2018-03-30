@@ -19,9 +19,11 @@ module.exports = async ({
 
     const compiler = webpack(config);
 
-    app.use(webpackDevMiddleware(compiler, {
-      stats: "minimal"
-    }));
+    app.use(
+      webpackDevMiddleware(compiler, {
+        stats: 'minimal',
+      }),
+    );
 
     app.listen(port, hostname, () => {
       console.log(`Starting server on http://${hostname}:${port}`);

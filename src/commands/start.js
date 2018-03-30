@@ -31,7 +31,8 @@ module.exports = runner.command(
     const srcDir = path.resolve(SRC_DIR);
     const distDir = path.resolve(BUNDLE_DIR);
 
-    await webpackDevServer({
+    await webpackDevServer(
+      {
         configPath,
         configParams: {
           devServer: true,
@@ -41,7 +42,7 @@ module.exports = runner.command(
         },
         port: devServerConfig.port,
       },
-      { title: 'haste-task-webpack-dev-server' }
+      { title: 'haste-task-webpack-dev-server' },
     );
   },
   { persistent: true },
