@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "main": "index.js",
   "bin": {
-    "haste-playable": "./bin/haste.js"
+    "haste-playable": "./bin/haste-playable.js"
   },
   "scripts": {
     "test": "jest",
@@ -24,7 +24,6 @@
     "css-loader": "^0.28.11",
     "dotjs-loader": "^0.1.0",
     "express": "^4.16.3",
-    "haste-cli": "0.2.5",
     "haste-core": "0.2.5",
     "haste-task-clean": "0.2.5",
     "haste-task-copy": "0.2.5",
