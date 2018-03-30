@@ -1,5 +1,4 @@
 const path = require('path');
-const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const parseEntry = require('./bundle/parseEntry');
@@ -31,9 +30,6 @@ module.exports = ({
         'node_modules',
       ],
     },
-    optimization: {
-      minimize: !debug,
-    },
     module: {
       rules: [
         require('../loaders/typescript')(),
@@ -43,12 +39,7 @@ module.exports = ({
         ...require('../loaders/sass')({ debug }),
       ],
     },
-    plugins: [
-      new webpack.DefinePlugin({
-        'process.env.NODE_ENV': debug ? '"development"' : '"production"',
-      }),
-      ...(devServer ? [new HtmlWebpackPlugin({ template: 'index.html' })] : []),
-    ],
+    plugins: devServer ? [new HtmlWebpackPlugin({ template: 'index.html' })] : [],
     devtool: 'source-map',
     node: {
       fs: 'empty',
@@ -60,7 +51,6 @@ module.exports = ({
       umdNamedDefine: true,
       path: distDir,
       filename: debug ? '[name].bundle.js' : '[name].bundle.min.js',
-      pathinfo: debug,
       library: exports,
       libraryTarget: 'umd',
     },
