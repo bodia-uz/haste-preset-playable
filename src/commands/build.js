@@ -36,7 +36,10 @@ module.exports = runner.command(async tasks => {
   }
 
   function transpileTemplates() {
-    return transpileDot({ pattern: `${SRC_DIR}/**/*.dot`, target: DIST_DIR });
+    return transpileDot(
+      { pattern: `${SRC_DIR}/**/*.dot`, target: DIST_DIR },
+      { title: 'haste-task-dotjs' },
+    );
   }
 
   function copyAssets() {
