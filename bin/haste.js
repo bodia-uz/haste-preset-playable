@@ -3,7 +3,7 @@ const prog = require('caporal');
 const runCLI = require('../src/cli');
 const {version} = require('../package');
 
-const {BOOL} = prog;
+const {BOOL, STRING} = prog;
 
 const ENTRY_PATTERN = /.+=.+/;
 
@@ -12,6 +12,8 @@ prog
   .description('haste-preset-playable');
 
 prog.command('test', 'Run unit tests if exists (mocha)')
+  .option('--mocha', 'Run unit tests with Mocha', BOOL)
+  .option('--karma', 'Run tests with Karma', STRING)
   .option('-w, --watch', 'Run tests on watch mode', BOOL)
   .action(() => runCLI('test'));
 
