@@ -33,10 +33,14 @@ prog
 
 prog
   .command('bundle', 'Bundle the app for production')
-  .argument('[entry...]', 'The entry point to build your app.')
+  .argument('[entry...]', 'The entry point to build your app.', entries => {
+    if (!entries || !entries.length) {
+      throw new Error('At least one entry should be defined');
+    }
+  })
   .option('--webpack', 'Bundle app with webpack.', BOOL)
   .option('--rollup', 'Bundle app with rollup.', BOOL)
-  .option('--mode', 'Bundle mode.', [
+  .option('--mode <mode>', 'Bundle mode.', [
     BundleMode.DEVELOPMENT,
     BundleMode.PRODUCTION,
   ])
