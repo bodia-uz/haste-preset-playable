@@ -20,7 +20,9 @@ module.exports = runner.command(
     const { mocha, karma } = tasks;
 
     if (cliArgs.mocha && cliArgs.karma) {
-      throw new Error('Could not run mocha and karma simultaneously');
+      throw new Error(
+        'Could not run mocha and karma simultaneously. Use --mocha or --karma options, but not both.',
+      );
     }
 
     if (cliArgs.mocha) {
