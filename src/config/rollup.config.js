@@ -29,10 +29,6 @@ module.exports = ({
       commonjs(),
       postcss({
         debug,
-        file: path.join(
-          distDir,
-          `${entryName}.rollup.bundle${debug ? '' : '.min'}.css`,
-        ),
       }),
       dot({
         templateSettings: DOTJS_OPTIONS,
@@ -50,10 +46,7 @@ module.exports = ({
     output: {
       name: exports,
       format: 'umd',
-      file: path.join(
-        distDir,
-        `${entryName}.rollup.bundle${debug ? '' : '.min'}.js`,
-      ),
+      file: path.join(distDir, `${entryName}.bundle${debug ? '' : '.min'}.js`),
 
       // https://rollupjs.org/guide/en#exports
       exports: 'named',

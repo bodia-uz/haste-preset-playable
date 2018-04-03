@@ -9,6 +9,11 @@ const DOTJS_OPTIONS = {
   selfcontained: true,
 };
 
+const Bundler = {
+  ROLLUP: 'rollup',
+  WEBPACK: 'webpack',
+};
+
 const BundleMode = {
   DEVELOPMENT: 'development',
   PRODUCTION: 'production',
@@ -20,5 +25,6 @@ module.exports = {
   BUNDLE_DIR,
   SPEC_PATTERN,
   DOTJS_OPTIONS,
+  Bundler,
   BundleMode,
 };

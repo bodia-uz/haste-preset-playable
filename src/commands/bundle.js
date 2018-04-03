@@ -5,12 +5,35 @@ const { createRunner } = require('haste-core');
 const LoggerPlugin = require('../plugins/haste-plugin-logger');
 
 const { isEntryString } = require('../config/bundle/parseEntry');
-const { SRC_DIR, BUNDLE_DIR, BundleMode } = require('../config/constants');
+const {
+  SRC_DIR,
+  BUNDLE_DIR,
+  Bundler,
+  BundleMode,
+} = require('../config/constants');
 const presetConfig = require('../config/presetConfig');
 
 const runner = createRunner({
   logger: new LoggerPlugin(),
 });
+
+function parseBundler(cliArgs, defaultBundler = Bundler.ROLLUP) {
+  if (cliArgs.rollup && cliArgs.webpack) {
+    throw new Error(
+      'Could not run rollup and webpack tasks simultaneously. Use --rollup or --webpack options, but not both.',
+    );
+  }
+
+  if (cliArgs.rollup) {
+    return Bundler.ROLLUP;
+  }
+
+  if (cliArgs.webpack) {
+    return Bundler.WEBPACK;
+  }
+
+  return defaultBundler;
+}
 
 function parseEntry(cliArgs) {
   const entry = cliArgs._.filter(isEntryString);
@@ -26,7 +49,8 @@ module.exports = runner.command(async tasks => {
   const srcDir = path.resolve(SRC_DIR);
   const distDir = path.resolve(BUNDLE_DIR);
 
-  const configParams = {
+  const bundler = parseBundler(cliArgs);
+  const bundlerConfigParams = {
     entry: parseEntry(cliArgs) || presetConfig.entry,
     exports: presetConfig.exports,
     srcDir,
@@ -37,19 +61,12 @@ module.exports = runner.command(async tasks => {
     await copyAssets();
   }
 
-  if (!cliArgs.webpack && !cliArgs.rollup) {
-    return Promise.all([
-      bundleWebpack(configParams, cliArgs.mode),
-      bundleRollup(configParams, cliArgs.mode),
-    ]);
+  if (bundler === Bundler.ROLLUP) {
+    await bundleRollup(bundlerConfigParams, cliArgs.mode);
   }
 
-  if (cliArgs.webpack) {
-    await bundleWebpack(configParams, cliArgs.mode);
-  }
-
-  if (cliArgs.rollup) {
-    await bundleRollup(configParams, cliArgs.mode);
+  if (bundler === Bundler.WEBPACK) {
+    await bundleWebpack(bundlerConfigParams, cliArgs.mode);
   }
 
   function copyAssets() {
