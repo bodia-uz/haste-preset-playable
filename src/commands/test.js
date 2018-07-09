@@ -28,7 +28,7 @@ module.exports = runner.command(
     if (cliArgs.mocha) {
       const mochaOptions = {
         pattern: SPEC_PATTERN,
-        requireFiles: [require.resolve('../config/mocha-setup')],
+        requireFiles: [require.resolve('../config/testSetup')],
         timeout: 30000,
         reporter: isTeamCity() ? 'mocha-teamcity-reporter' : 'progress',
       };
