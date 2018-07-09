@@ -17,7 +17,7 @@ module.exports = function (wallaby) {
       const mocha = wallaby.testFramework;
       mocha.timeout(30000);
       process.env.IN_WALLABY = true;
-      require('haste-preset-playable/src/config/mocha-setup');
+      require('haste-preset-playable/src/config/testSetup');
     },
     env: {
       type: 'node',
