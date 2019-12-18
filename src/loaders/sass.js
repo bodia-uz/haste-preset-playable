@@ -11,11 +11,13 @@ const styleLoader = ({ debug }) => ({
 const cssLoader = ({ debug, modules }) => ({
   loader: 'css-loader',
   options: {
-    camelCase: true,
-    localIdentName: debug
-      ? '[path][name]__[local]__[hash:base64:5]'
-      : '[hash:base64:5]',
-    modules: modules,
+    localsConvention: 'camelCase',
+    modules: {
+      ...modules,
+      localIdentName: debug
+        ? '[path][name]__[local]__[hash:base64:5]'
+        : '[hash:base64:5]',
+    },
     sourceMap: debug,
     importLoaders: 2,
   },
