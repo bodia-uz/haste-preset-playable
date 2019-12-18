@@ -1,6 +1,6 @@
 {
   "name": "haste-preset-playable",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "main": "index.js",
   "bin": {
     "haste-playable": "./bin/haste-playable.js"
